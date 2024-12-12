@@ -10,7 +10,7 @@ namespace SpotifyMusicQuizApi.Controllers
     [ApiController]
     public class UserdataController : ControllerBase
     {
-        [HttpGet(Name ="GetPlaylist")]
+        [HttpGet("GetPlaylist")]
         public IEnumerable<Playlist> GetPlaylists(string userid)
         {
             var client = new RestClient("https://api.spotify.com/v1");
@@ -27,7 +27,8 @@ namespace SpotifyMusicQuizApi.Controllers
             {
                 string id = JsonDocument.Parse(content).RootElement.GetProperty("items")[i].GetProperty("id").ToString();
                 string name = JsonDocument.Parse(content).RootElement.GetProperty("items")[i].GetProperty("name").ToString();
-                list.Add(new Playlist(id, name));
+                string img = JsonDocument.Parse(content).RootElement.GetProperty("items")[i].GetProperty("images")[0].GetProperty("url").ToString();
+                list.Add(new Playlist(id, name, img));
             }
             return list;
         }

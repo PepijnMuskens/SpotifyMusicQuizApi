@@ -12,11 +12,18 @@ namespace SpotifyMusicQuizApi.Controllers
             _logger = logger;
         }
 
-        
-        [HttpGet(Name = "GetToken")]
+
+        [HttpGet("GetToken")]
+
         public string GetToken()
         {
             return Token.GetToken();
+        }
+
+        [HttpGet("GetTokencode/{code}")]
+        public string GetTokenCode(string code)
+        {
+            return Token.GetTokenCode(code);
         }
     }
 }

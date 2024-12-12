@@ -49,6 +49,30 @@ namespace SpotifyMusicQuizApi
             }
             return token;
         }
-        
+
+        public static string GetTokenCode(string code)
+        {
+            if (expireTime < DateTime.UtcNow)
+            {
+                var client = new RestClient("https://accounts.spotify.com");
+                var request = new RestRequest("api/token");
+                request.AddParameter("grant_type", "authorization_code");
+                request.AddParameter("redirect_uri", "http://127.0.0.1:5173");
+                request.AddParameter("code", code);
+                request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                request.AddHeader("Authorization", $"Basic {clientId}:{clientSecret}");
+                var response = client.Post(request);
+                var content = response.Content;
+                if (content != null)
+                {
+                    token = JsonDocument.Parse(content).RootElement.GetProperty("access_token").ToString();
+                    string time = JsonDocument.Parse(content).RootElement.GetProperty("expires_in").ToString(); ;
+                    expireTime = DateTime.UtcNow.AddSeconds(Convert.ToInt32(time));
+                }
+
+                return token;
+            }
+            return token;
+        }
     }
 }
